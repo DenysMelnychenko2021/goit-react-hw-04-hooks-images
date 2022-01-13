@@ -11,6 +11,8 @@ import { Loader } from 'components/loader';
 import API from 'services/imagesApi';
 import { getScroll } from 'services/getScroll';
 
+import { ItemContext } from 'contexts/ItemContext';
+
 export const App = () => {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -73,14 +75,12 @@ export const App = () => {
           {hits.length === 0 && <Loader />}
 
           {hits.length > 0 && (
-            <>
-              <ImageGallery
-                query={query}
-                hits={hits}
-                showLargeImg={showLargeImg}
-              />
+            <ItemContext.Provider
+              value={{ query: query, showLargeImg: showLargeImg }}
+            >
+              <ImageGallery hits={hits} />
               <Loader />
-            </>
+            </ItemContext.Provider>
           )}
         </>
       )}
@@ -99,7 +99,11 @@ export const App = () => {
             </p>
           )}
 
-          <ImageGallery query={query} hits={hits} showLargeImg={showLargeImg} />
+          <ItemContext.Provider
+            value={{ query: query, showLargeImg: showLargeImg }}
+          >
+            <ImageGallery hits={hits} />
+          </ItemContext.Provider>
 
           {hits.length > 0 && (
             <p>
